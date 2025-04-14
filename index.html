@@ -93,12 +93,12 @@
       </div>
       <div class="section-title">特殊入力</div>
       <div class="button-grid grid-3x3-special">
-		<button onclick="addInput('+')">＋</button>
+        <button onclick="addInput('+')">＋</button>
         <button onclick="addInput('(CR)')">キャンセルラッシュ</button>
         <button onclick="addInput('(DR)')">ドライブラッシュ</button>
         <button onclick="addInput('J')">ジャンプ</button>
         <button onclick="addInput('前J')">前ジャンプ</button>
-		<button onclick="addInput('(前ステ)')">前ステ</button>
+        <button onclick="addInput('(前ステ)')">前ステ</button>
         <button onclick="addInput('(近距離)')">近距離</button>
         <button onclick="addInput('(遅らせ)')">遅らせ</button>
         <button onclick="addInput('(微歩き)')">微歩き</button>
@@ -178,16 +178,27 @@
       localStorage.setItem('sf6_memo', memoBox.value);
     }
 
-    function restoreState() {
-      const savedOutput = localStorage.getItem('sf6_output');
-      const savedMemo = localStorage.getItem('sf6_memo');
-      if (savedOutput) output = savedOutput;
-      if (savedMemo) memoBox.value = savedMemo;
+    function convertOutputMode() {
+      let mode = getMode();
+      let newOutput = output;
+
+      if (mode === 'arrow') {
+        newOutput = newOutput.replace(/[123456789]/g, m => arrowMap[m]);
+        newOutput = newOutput.replace(/([↖↗↙↘←→↑↓N])([A-Za-z一-龥])/g, '$1+$2');
+      } else {
+        const reverseMap = Object.fromEntries(Object.entries(arrowMap).map(([k, v]) => [v, k]));
+        newOutput = newOutput.replace(/[↖↗↙↘←→↑↓N]/g, m => reverseMap[m] || m);
+        newOutput = newOutput.replace(/([1-9])\+([A-Za-z一-龥])/g, '$1$2');
+      }
+
+      output = newOutput;
       outputBox.textContent = output;
+      saveState();
     }
 
-    memoBox.addEventListener('input', saveState);
-    window.onload = restoreState;
+    document.querySelectorAll('input[name="mode"]').forEach(radio => {
+      radio.addEventListener('change', convertOutputMode);
+    });
   </script>
 </body>
 </html>
