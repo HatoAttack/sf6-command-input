@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>スト6コンボ入力ツール</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { background: #fff; color: #000; font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+    h1 { text-align: center; color: #000; margin-bottom: 20px; }
+    .container { display: flex; flex-wrap: wrap; gap: 20px; }
+    .left, .right {
+      background: #f2f2f2; border: 1px solid #888; border-radius: 10px;
+      padding: 20px; box-sizing: border-box;
+    }
+    .left { flex: 1 1 320px; }
+    .right { flex: 1 1 320px; }
+    .section-title { font-size: 18px; border-bottom: 1px solid #aaa; margin-bottom: 10px; }
+    .button-grid { display: grid; gap: 10px; margin-bottom: 15px; }
+    .grid-3x3, .grid-3x3-special { grid-template-columns: repeat(3, 1fr); }
+    .grid-4x2 { grid-template-columns: repeat(4, 1fr); }
+    button {
+      font-size: 14px; padding: 10px; background: #fff; color: #000;
+      border: 1px solid #888; border-radius: 5px; cursor: pointer;
+    }
+    button:hover { background: #ddd; }
+    .display-box {
+      background: #fff; padding: 15px; border: 1px solid #ccc; border-radius: 10px;
+      min-height: 80px; white-space: pre-wrap; font-size: 16px; margin-bottom: 10px;
+    }
+    .memo-box {
+      width: 100%; padding: 10px; font-size: 14px; border-radius: 8px;
+      border: 1px solid #aaa; background: #fff; color: #000;
+      margin-bottom: 10px; box-sizing: border-box;
+    }
+    .control { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+    .mode-select { margin-bottom: 15px; }
+    label { margin-right: 10px; }
+    @media (max-width: 768px) { .container { flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <h1>スト6 コンボ入力ツール</h1>
+  <div class="container">
+    <div class="left">
+      <div class="section-title">表示モード切替</div>
+      <div class="mode-select">
+        <label><input type="radio" name="mode" value="arrow" checked> 矢印</label>
+        <label><input type="radio" name="mode" value="number"> 数字</label>
+      </div>
+      <div class="section-title">方向キー</div>
+      <div class="button-grid grid-3x3">
+        <button onclick="addInput('7')">↖</button>
+        <button onclick="addInput('8')">↑</button>
+        <button onclick="addInput('9')">↗</button>
+        <button onclick="addInput('4')">←</button>
+        <button onclick="addInput('5')">N</button>
+        <button onclick="addInput('6')">→</button>
+        <button onclick="addInput('1')">↙</button>
+        <button onclick="addInput('2')">↓</button>
+        <button onclick="addInput('3')">↘</button>
+      </div>
+      <div class="button-grid grid-3x3">
+        <button onclick="addInput('タメ')">タメ</button>
+        <button onclick="addInput('1回転')">1回転</button>
+        <button onclick="addInput('2回転')">2回転</button>
+      </div>
+      
+      <div class="section-title">複合方向</div>
+      <div class="button-grid grid-4x2">
+        <button onclick="addInput('236')">波動</button>
+        <button onclick="addInput('623')">昇龍</button>
+        <button onclick="addInput('214')">竜巻</button>
+        <button onclick="addInput('412')">逆昇龍</button>
+        <button onclick="addInput('41236')">ヨガ</button>
+        <button onclick="addInput('63214')">逆ヨガ</button>
+      </div>
+      
+      <div class="section-title">技ボタン</div>
+      <div class="button-grid grid-4x2">
+        <button onclick="addInput('P', true)">P</button>
+        <button onclick="addInput('小P', true)">小P</button>
+        <button onclick="addInput('中P', true)">中P</button>
+        <button onclick="addInput('大P', true)">大P</button>
+        <button onclick="addInput('K', true)">K</button>
+        <button onclick="addInput('小K', true)">小K</button>
+        <button onclick="addInput('中K', true)">中K</button>
+        <button onclick="addInput('大K', true)">大K</button>
+      </div>
+      <div class="section-title">特殊入力</div>
+      <div class="button-grid grid-3x3-special">
+        <button onclick="addInput(' > ')">＞(次)</button>
+        <button onclick="addInput('(CR)')">キャンセルラッシュ</button>
+        <button onclick="addInput('(DR)')">ドライブラッシュ</button>
+        <button onclick="addInput('+')">＋</button>
+        <button onclick="addInput('J')">ジャンプ</button>
+        <button onclick="addInput('前J')">前ジャンプ</button>
+        <button onclick="addInput('(近距離)')">近距離</button>
+        <button onclick="addInput('(遅らせ)')">遅らせ</button>
+        <button onclick="addInput('(微歩き)')">微歩き</button>
+      </div>
+    </div>
+    <div class="right">
+      <div class="section-title">出力</div>
+      <div class="display-box" id="output"></div>
+      <div class="section-title">メモ</div>
+      <textarea class="memo-box" id="memo" rows="4" placeholder="フレーム数や解説を入力"></textarea>
+      <div class="control">
+        <button onclick="copyOutput()">コピー</button>
+        <button onclick="clearOutput()">クリア</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    let output = '';
+    let lastWasDirection = false;
+    const outputBox = document.getElementById('output');
+    const memoBox = document.getElementById('memo');
+    const arrowMap = {'1': '↙','2': '↓','3': '↘','4': '←','5': 'N','6': '→','7': '↖','8': '↑','9': '↗'};
+
+    function getMode() {
+      return document.querySelector('input[name="mode"]:checked').value;
+    }
+
+    function convertToArrow(seq) {
+      return seq.split('').map(c => arrowMap[c] || c).join('');
+    }
+
+	function addInput(value, isAttack = false) {
+	  let mode = getMode();
+	  let insert = value;
+	  if (!isNaN(value)) {
+	    insert = (mode === 'arrow') ? convertToArrow(value) : value;
+	    lastWasDirection = true;
+	  } else if (isAttack && lastWasDirection) {
+	    insert = (getMode() === 'arrow') ? '+' + value : value;
+	    lastWasDirection = false;
+	  } else {
+	    lastWasDirection = false;
+	  }
+	  output += insert;
+	  outputBox.textContent = output;
+	  saveState();
+	}
+
+    function copyOutput() {
+      navigator.clipboard.writeText(output + '\n' + memoBox.value);
+      alert('コピーしました');
+    }
+
+    function clearOutput() {
+      output = '';
+      outputBox.textContent = '';
+      memoBox.value = '';
+      lastWasDirection = false;
+      localStorage.removeItem('sf6_output');
+      localStorage.removeItem('sf6_memo');
+    }
+
+    function saveState() {
+      localStorage.setItem('sf6_output', output);
+      localStorage.setItem('sf6_memo', memoBox.value);
+    }
+
+    function restoreState() {
+      const savedOutput = localStorage.getItem('sf6_output');
+      const savedMemo = localStorage.getItem('sf6_memo');
+      if (savedOutput) output = savedOutput;
+      if (savedMemo) memoBox.value = savedMemo;
+      outputBox.textContent = output;
+    }
+
+    memoBox.addEventListener('input', saveState);
+    window.onload = restoreState;
+  </script>
+</body>
+</html>
