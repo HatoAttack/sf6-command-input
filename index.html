@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -64,7 +65,6 @@
         <button onclick="addInput('1回転')">1回転</button>
         <button onclick="addInput('2回転')">2回転</button>
       </div>
-      
       <div class="section-title">複合方向</div>
       <div class="button-grid grid-4x2">
         <button onclick="addInput('236')">波動</button>
@@ -73,8 +73,8 @@
         <button onclick="addInput('412')">逆昇龍</button>
         <button onclick="addInput('41236')">ヨガ</button>
         <button onclick="addInput('63214')">逆ヨガ</button>
+        <button onclick="addInput(' > ')">＞(次)</button>
       </div>
-      
       <div class="section-title">技ボタン</div>
       <div class="button-grid grid-4x2">
         <button onclick="addInput('P', true)">P</button>
@@ -86,14 +86,19 @@
         <button onclick="addInput('中K', true)">中K</button>
         <button onclick="addInput('大K', true)">大K</button>
       </div>
+      <div class="button-grid grid-3x3">
+        <button onclick="addInput(' SA1 ')">SA1</button>
+        <button onclick="addInput(' SA2 ')">SA2</button>
+        <button onclick="addInput(' SA3 ')">SA3</button>
+      </div>
       <div class="section-title">特殊入力</div>
       <div class="button-grid grid-3x3-special">
-        <button onclick="addInput(' > ')">＞(次)</button>
+		<button onclick="addInput('+')">＋</button>
         <button onclick="addInput('(CR)')">キャンセルラッシュ</button>
         <button onclick="addInput('(DR)')">ドライブラッシュ</button>
-        <button onclick="addInput('+')">＋</button>
         <button onclick="addInput('J')">ジャンプ</button>
         <button onclick="addInput('前J')">前ジャンプ</button>
+		<button onclick="addInput('(前ステ)')">前ステ</button>
         <button onclick="addInput('(近距離)')">近距離</button>
         <button onclick="addInput('(遅らせ)')">遅らせ</button>
         <button onclick="addInput('(微歩き)')">微歩き</button>
@@ -105,6 +110,7 @@
       <div class="section-title">メモ</div>
       <textarea class="memo-box" id="memo" rows="4" placeholder="フレーム数や解説を入力"></textarea>
       <div class="control">
+        <button onclick="undoOutput()">戻る</button>
         <button onclick="copyOutput()">コピー</button>
         <button onclick="clearOutput()">クリア</button>
       </div>
@@ -112,6 +118,7 @@
   </div>
   <script>
     let output = '';
+    let history = [];
     let lastWasDirection = false;
     const outputBox = document.getElementById('output');
     const memoBox = document.getElementById('memo');
@@ -125,22 +132,31 @@
       return seq.split('').map(c => arrowMap[c] || c).join('');
     }
 
-	function addInput(value, isAttack = false) {
-	  let mode = getMode();
-	  let insert = value;
-	  if (!isNaN(value)) {
-	    insert = (mode === 'arrow') ? convertToArrow(value) : value;
-	    lastWasDirection = true;
-	  } else if (isAttack && lastWasDirection) {
-	    insert = (getMode() === 'arrow') ? '+' + value : value;
-	    lastWasDirection = false;
-	  } else {
-	    lastWasDirection = false;
-	  }
-	  output += insert;
-	  outputBox.textContent = output;
-	  saveState();
-	}
+    function addInput(value, isAttack = false) {
+      history.push(output);
+      let mode = getMode();
+      let insert = value;
+      if (!isNaN(value)) {
+        insert = (mode === 'arrow') ? convertToArrow(value) : value;
+        lastWasDirection = true;
+      } else if (isAttack && lastWasDirection) {
+        insert = (mode === 'arrow') ? '+' + value : value;
+        lastWasDirection = false;
+      } else {
+        lastWasDirection = false;
+      }
+      output += insert;
+      outputBox.textContent = output;
+      saveState();
+    }
+
+    function undoOutput() {
+      if (history.length > 0) {
+        output = history.pop();
+        outputBox.textContent = output;
+        saveState();
+      }
+    }
 
     function copyOutput() {
       navigator.clipboard.writeText(output + '\n' + memoBox.value);
@@ -152,6 +168,7 @@
       outputBox.textContent = '';
       memoBox.value = '';
       lastWasDirection = false;
+      history = [];
       localStorage.removeItem('sf6_output');
       localStorage.removeItem('sf6_memo');
     }
