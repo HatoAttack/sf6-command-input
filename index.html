@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>スト6コンボ入力ツール</title>
+  <p class="readme-note">
+  大まかな使い方は、<a href="https://github.com/HatoAttack/sf6-command-input" target="_blank">GitHubリポジトリ</a>を読んでください。
+	</p>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { 
@@ -35,7 +38,7 @@
     .right { 
       flex: 1 1 320px; 
     }
-    /* 横並び用のモード切替 */
+    /* モード切替横並び */
     .mode-toggle-container {
       display: flex;
       gap: 20px;
@@ -131,6 +134,41 @@
       right: 10px; 
       z-index: 1000; 
     }
+    /* ----- 新規追加：技ボタンの色指定 ----- */
+    .btn-small {
+      background-color: #4583a8;
+      color: #fff;
+      border: 1px solid #888;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-middle {
+      background-color: #979829;
+      color: #fff;
+      border: 1px solid #888;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-large {
+      background-color: #c36264;
+      color: #fff;
+      border: 1px solid #888;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-pk-essential {
+      background-color: #eb6e00;
+      color: #fff;
+      border: 1px solid #888;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-small:hover, 
+    .btn-middle:hover, 
+    .btn-large:hover, 
+    .btn-pk-essential:hover {
+      opacity: 0.9;
+    }
   </style>
 </head>
 <body>
@@ -142,7 +180,7 @@
   <h1>スト6 コンボ入力ツール</h1>
   <div class="container">
     <div class="left">
-      <!-- モード切替: 横並びに配置 -->
+      <!-- モード切替（横並び） -->
       <div class="mode-toggle-container">
         <div class="mode-section">
           <div class="section-title">表示モード切替</div>
@@ -163,7 +201,7 @@
       <div class="row">
         <div class="column" id="direction-area">
           <div class="section-title">方向キー</div>
-          <!-- 3×3グリッド（方向キー: data-value属性付与） -->
+          <!-- 3×3グリッド（方向キー：data-value属性付与） -->
           <div class="button-grid grid-3x3">
             <button class="direction-button" data-value="7" onclick="addInput('7')">↖</button>
             <button class="direction-button" data-value="8" onclick="addInput('8')">↑</button>
@@ -195,14 +233,14 @@
           <div id="classic-buttons">
             <div class="section-title">技ボタン（クラシック）</div>
             <div class="button-grid grid-4x2">
-              <button onclick="addInput('P', true)">P</button>
-              <button onclick="addInput('小P', true)">小P</button>
-              <button onclick="addInput('中P', true)">中P</button>
-              <button onclick="addInput('大P', true)">大P</button>
-              <button onclick="addInput('K', true)">K</button>
-              <button onclick="addInput('小K', true)">小K</button>
-              <button onclick="addInput('中K', true)">中K</button>
-              <button onclick="addInput('大K', true)">大K</button>
+              <button class="btn-pk-essential" onclick="addInput('P', true)">P</button>
+              <button class="btn-small" onclick="addInput('小P', true)">小P</button>
+              <button class="btn-middle" onclick="addInput('中P', true)">中P</button>
+              <button class="btn-large" onclick="addInput('大P', true)">大P</button>
+              <button class="btn-pk-essential" onclick="addInput('K', true)">K</button>
+              <button class="btn-small" onclick="addInput('小K', true)">小K</button>
+              <button class="btn-middle" onclick="addInput('中K', true)">中K</button>
+              <button class="btn-large" onclick="addInput('大K', true)">大K</button>
             </div>
             <div class="button-grid grid-3x3">
               <button onclick="addInput(' SA1 ')">SA1</button>
@@ -213,10 +251,10 @@
           <div id="modern-buttons" style="display:none;">
             <div class="section-title">技ボタン（モダン）</div>
             <div class="button-grid grid-4x2">
-              <button onclick="addInput('弱', true)">弱</button>
-              <button onclick="addInput('中', true)">中</button>
-              <button onclick="addInput('強', true)">強</button>
-              <button onclick="addInput('必殺', true)">必殺</button>
+              <button class="btn-small" onclick="addInput('弱', true)">弱</button>
+              <button class="btn-middle" onclick="addInput('中', true)">中</button>
+              <button class="btn-large" onclick="addInput('強', true)">強</button>
+              <button class="btn-pk-essential" onclick="addInput('必殺', true)">必殺</button>
               <button onclick="addInput('アシスト', true)">アシスト</button>
             </div>
             <div class="button-grid grid-3x3">
