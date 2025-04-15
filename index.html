@@ -5,54 +5,165 @@
   <title>スト6コンボ入力ツール</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { background: #fff; color: #000; font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-    h1 { text-align: center; color: #000; margin-bottom: 20px; }
-    .container { display: flex; flex-wrap: wrap; gap: 20px; }
-    .left, .right { background: #f2f2f2; border: 1px solid #888; border-radius: 10px; padding: 20px; box-sizing: border-box; }
-    .left { flex: 1 1 320px; }
-    .right { flex: 1 1 320px; }
-    .section-title { font-size: 18px; border-bottom: 1px solid #aaa; margin-bottom: 10px; }
-    .button-grid { display: grid; gap: 10px; margin-bottom: 15px; }
-    .grid-3x3, .grid-3x3-special { grid-template-columns: repeat(3, 1fr); }
-    .grid-4x2 { grid-template-columns: repeat(4, 1fr); }
-    .grid-3x2 { grid-template-columns: repeat(3, 1fr); }
-    .grid-3x1 { grid-template-columns: repeat(3, 1fr); } /* 任意入力ボタン用グリッド */
-    .row { display: flex; gap: 20px; margin-bottom: 20px; }
-    .column { flex: 1; }
-    button { font-size: 14px; padding: 10px; background: #fff; color: #000; border: 1px solid #888; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #ddd; }
-    .display-box { background: #fff; padding: 15px; border: 1px solid #ccc; border-radius: 10px; min-height: 80px; white-space: pre-wrap; font-size: 16px; margin-bottom: 10px; }
-    .memo-box { width: 100%; padding: 10px; font-size: 14px; border-radius: 8px; border: 1px solid #aaa; background: #fff; color: #000; margin-bottom: 10px; box-sizing: border-box; }
-    .control { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
-    .mode-select { margin-bottom: 15px; }
-    label { margin-right: 10px; }
-    @media (max-width: 768px) { .row { flex-direction: column; } }
-    .divider { border: none; border-top: 1px solid #888; margin: 10px 0; }
-    /* GitHub アイコン用 */
-    .github-icon { position: fixed; top: 10px; right: 10px; z-index: 1000; }
+    body { 
+      background: #fff; 
+      color: #000; 
+      font-family: Arial, sans-serif; 
+      margin: 0; 
+      padding: 20px; 
+    }
+    h1 { 
+      text-align: center; 
+      color: #000; 
+      margin-bottom: 20px; 
+    }
+    .container { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 20px; 
+    }
+    .left, .right { 
+      background: #f2f2f2; 
+      border: 1px solid #888; 
+      border-radius: 10px; 
+      padding: 20px; 
+      box-sizing: border-box; 
+    }
+    .left { 
+      flex: 1 1 320px; 
+    }
+    .right { 
+      flex: 1 1 320px; 
+    }
+    /* 横並び用のモード切替 */
+    .mode-toggle-container {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .mode-section { }
+    .section-title { 
+      font-size: 18px; 
+      border-bottom: 1px solid #aaa; 
+      margin-bottom: 10px; 
+    }
+    .mode-select label { 
+      margin-right: 10px; 
+    }
+    .button-grid { 
+      display: grid; 
+      gap: 10px; 
+      margin-bottom: 15px; 
+    }
+    .grid-3x3, .grid-3x3-special { 
+      grid-template-columns: repeat(3, 1fr); 
+    }
+    .grid-4x2 { 
+      grid-template-columns: repeat(4, 1fr); 
+    }
+    .grid-3x2 { 
+      grid-template-columns: repeat(3, 1fr); 
+    }
+    .grid-3x1 { 
+      grid-template-columns: repeat(3, 1fr); 
+    }
+    .row { 
+      display: flex; 
+      gap: 20px; 
+      margin-bottom: 20px; 
+    }
+    .column { 
+      flex: 1; 
+    }
+    button { 
+      font-size: 14px; 
+      padding: 10px; 
+      background: #fff; 
+      color: #000; 
+      border: 1px solid #888; 
+      border-radius: 5px; 
+      cursor: pointer; 
+    }
+    button:hover { 
+      background: #ddd; 
+    }
+    .display-box { 
+      background: #fff; 
+      padding: 15px; 
+      border: 1px solid #ccc; 
+      border-radius: 10px; 
+      min-height: 80px; 
+      white-space: pre-wrap; 
+      font-size: 16px; 
+      margin-bottom: 10px; 
+    }
+    .memo-box { 
+      width: 100%; 
+      padding: 10px; 
+      font-size: 14px; 
+      border-radius: 8px; 
+      border: 1px solid #aaa; 
+      background: #fff; 
+      color: #000; 
+      margin-bottom: 10px; 
+      box-sizing: border-box; 
+    }
+    .control { 
+      display: flex; 
+      gap: 10px; 
+      flex-wrap: wrap; 
+      margin-bottom: 10px; 
+    }
+    @media (max-width: 768px) { 
+      .row { flex-direction: column; } 
+      .mode-toggle-container { flex-direction: column; }
+    }
+    .divider { 
+      border: none; 
+      border-top: 1px solid #888; 
+      margin: 10px 0; 
+    }
+    /* GitHubアイコン */
+    .github-icon { 
+      position: fixed; 
+      top: 10px; 
+      right: 10px; 
+      z-index: 1000; 
+    }
   </style>
 </head>
 <body>
   <!-- GitHubアイコン（右上固定） -->
-  <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="32" height="32"></a>大まかな使い方はリポジトリを見てください。
+  <a href="https://github.com/HatoAttack/sf6-command-input" target="_blank" class="github-icon">
+    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="32" height="32">
+  </a>
   
   <h1>スト6 コンボ入力ツール</h1>
   <div class="container">
     <div class="left">
-      <div class="section-title">表示モード切替</div>
-      <div class="mode-select">
-        <label><input type="radio" name="mode" value="arrow" checked> 矢印</label>
-        <label><input type="radio" name="mode" value="number"> 数字</label>
+      <!-- モード切替: 横並びに配置 -->
+      <div class="mode-toggle-container">
+        <div class="mode-section">
+          <div class="section-title">表示モード切替</div>
+          <div class="mode-select">
+            <label><input type="radio" name="mode" value="arrow" checked> 矢印</label>
+            <label><input type="radio" name="mode" value="number"> 数字</label>
+          </div>
+        </div>
+        <div class="mode-section">
+          <div class="section-title">操作モード切替</div>
+          <div class="mode-select">
+            <label><input type="radio" name="style" value="classic" checked> クラシック</label>
+            <label><input type="radio" name="style" value="modern"> モダン</label>
+          </div>
+        </div>
       </div>
-      <div class="section-title">操作モード切替</div>
-      <div class="mode-select">
-        <label><input type="radio" name="style" value="classic" checked> クラシック</label>
-        <label><input type="radio" name="style" value="modern"> モダン</label>
-      </div>
+      
       <div class="row">
         <div class="column" id="direction-area">
           <div class="section-title">方向キー</div>
-          <!-- 3×3 グリッド（方向キーはdata-value属性を付与） -->
+          <!-- 3×3グリッド（方向キー: data-value属性付与） -->
           <div class="button-grid grid-3x3">
             <button class="direction-button" data-value="7" onclick="addInput('7')">↖</button>
             <button class="direction-button" data-value="8" onclick="addInput('8')">↑</button>
@@ -66,7 +177,7 @@
           </div>
           <!-- 仕切り線 -->
           <hr class="divider">
-          <!-- 3×2 グリッド -->
+          <!-- 3×2グリッド -->
           <div class="button-grid grid-3x2">
             <button onclick="addInput('タメ')">タメ</button>
             <button onclick="addInput('1回転')">1回転</button>
@@ -145,7 +256,7 @@
       <div class="section-title">メモ</div>
       <textarea class="memo-box" id="memo" rows="4" placeholder="フレーム数や解説を入力"></textarea>
       <div class="control">
-        <button onclick="undoOutput()">戻る(Undo)</button>
+        <button onclick="undoOutput()">戻る</button>
         <button onclick="copyOutput()">コピー</button>
         <button onclick="clearOutput()">クリア</button>
       </div>
@@ -160,7 +271,7 @@
     </div>
   </div>
   <script>
-    // 既存のコンボ入力処理
+    // ----- コンボ入力エリア -----
     let output = '';
     let history = [];
     let lastWasDirection = false;
@@ -236,7 +347,7 @@
       outputBox.textContent = output;
       saveState();
     }
-    // 方向キーの表示をモードに合わせて更新
+    // 方向キー表示更新（モード切替に合わせる）
     function updateDirectionButtons() {
       const mode = getMode();
       const buttons = document.querySelectorAll('.direction-button');
@@ -286,12 +397,10 @@
       btn.style.color = "";
     }
     
-    // ----- 保存・読み込み機能用処理 -----
-    // グローバル変数
+    // ----- 保存・読み込み機能 -----
     var savedCombos = [];
     var untitledCounter = 1;
-    
-    // 作成日時を "YYYY-MM-DDThh:mm" 形式で返す関数
+    // 現在の日時を "YYYY-MM-DDThh:mm" 形式で返す
     function formatDate() {
       let now = new Date();
       let year = now.getFullYear();
@@ -301,7 +410,6 @@
       let minute = ("0" + now.getMinutes()).slice(-2);
       return `${year}-${month}-${day}T${hour}:${minute}`;
     }
-    
     // ID生成：作成日時（YYYYMMDDhhmm）を16進数に変換
     function generateID() {
       let now = new Date();
@@ -313,8 +421,7 @@
       let dateStr = year + month + day + hour + minute;
       return parseInt(dateStr, 10).toString(16);
     }
-    
-    // コンボ保存処理：ユーザー入力＋自動割当（タイトルが空の場合「無題X」）
+    // コンボ保存処理
     function saveCurrentCombo() {
       let combo = output;
       let memoText = memoBox.value;
@@ -324,14 +431,14 @@
       }
       let titleInput = prompt("コンボのタイトルを入力してください。（空欄の場合は自動で『無題』が割り当てられます）");
       let title;
-      if(titleInput === null) return; // キャンセル
+      if(titleInput === null) return;
       if(titleInput.trim() === ""){
         title = "無題" + untitledCounter;
         untitledCounter++;
       } else {
         title = titleInput.trim();
       }
-      // 同じタイトルのエントリがあるかチェック（内部IDで管理するため、タイトルでの上書きを実現）
+      // 同じタイトルのエントリがあれば上書き
       let existing = savedCombos.find(item => item.title === title);
       let nowFormatted = formatDate();
       if(existing) {
@@ -353,7 +460,6 @@
         alert("新しいコンボが保存されました。");
       }
     }
-    
     // CSVエクスポート処理
     function exportCombosToCSV(comboArray) {
       let csvContent = "ID,タイトル,コンボ,メモ,作成日時,更新日時\n";
@@ -368,8 +474,7 @@
       a.click();
       URL.revokeObjectURL(url);
     }
-    
-    // CSV読み込み処理（ファイル選択イベントで呼び出し）
+    // CSV読み込み処理
     function handleFileSelect(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -389,7 +494,6 @@
       };
       reader.readAsText(file, "UTF-8");
     }
-    
   </script>
 </body>
 </html>
