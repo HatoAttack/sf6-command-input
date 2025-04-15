@@ -48,6 +48,13 @@
         <label><input type="radio" name="mode" value="arrow" checked> 矢印</label>
         <label><input type="radio" name="mode" value="number"> 数字</label>
       </div>
+
+      <div class="section-title">操作モード切替</div>
+      <div class="mode-select">
+        <label><input type="radio" name="style" value="classic" checked> クラシック</label>
+        <label><input type="radio" name="style" value="modern"> モダン</label>
+      </div>
+
       <div class="section-title">方向キー</div>
       <div class="button-grid grid-3x3">
         <button onclick="addInput('7')">↖</button>
@@ -60,11 +67,13 @@
         <button onclick="addInput('2')">↓</button>
         <button onclick="addInput('3')">↘</button>
       </div>
+
       <div class="button-grid grid-3x3">
         <button onclick="addInput('タメ')">タメ</button>
         <button onclick="addInput('1回転')">1回転</button>
         <button onclick="addInput('2回転')">2回転</button>
       </div>
+
       <div class="section-title">複合方向</div>
       <div class="button-grid grid-4x2">
         <button onclick="addInput('236')">波動</button>
@@ -75,22 +84,42 @@
         <button onclick="addInput('63214')">逆ヨガ</button>
         <button onclick="addInput(' > ')">＞(次)</button>
       </div>
+
       <div class="section-title">技ボタン</div>
-      <div class="button-grid grid-4x2">
-        <button onclick="addInput('P', true)">P</button>
-        <button onclick="addInput('小P', true)">小P</button>
-        <button onclick="addInput('中P', true)">中P</button>
-        <button onclick="addInput('大P', true)">大P</button>
-        <button onclick="addInput('K', true)">K</button>
-        <button onclick="addInput('小K', true)">小K</button>
-        <button onclick="addInput('中K', true)">中K</button>
-        <button onclick="addInput('大K', true)">大K</button>
+
+      <div id="classic-buttons">
+        <div class="button-grid grid-4x2">
+          <button onclick="addInput('P', true)">P</button>
+          <button onclick="addInput('小P', true)">小P</button>
+          <button onclick="addInput('中P', true)">中P</button>
+          <button onclick="addInput('大P', true)">大P</button>
+          <button onclick="addInput('K', true)">K</button>
+          <button onclick="addInput('小K', true)">小K</button>
+          <button onclick="addInput('中K', true)">中K</button>
+          <button onclick="addInput('大K', true)">大K</button>
+        </div>
+        <div class="button-grid grid-3x3">
+          <button onclick="addInput(' SA1 ')">SA1</button>
+          <button onclick="addInput(' SA2 ')">SA2</button>
+          <button onclick="addInput(' SA3 ')">SA3</button>
+        </div>
       </div>
-      <div class="button-grid grid-3x3">
-        <button onclick="addInput(' SA1 ')">SA1</button>
-        <button onclick="addInput(' SA2 ')">SA2</button>
-        <button onclick="addInput(' SA3 ')">SA3</button>
+
+      <div id="modern-buttons" style="display:none;">
+        <div class="button-grid grid-4x2">
+          <button onclick="addInput('弱', true)">弱</button>
+          <button onclick="addInput('中', true)">中</button>
+          <button onclick="addInput('強', true)">強</button>
+          <button onclick="addInput('必殺', true)">必殺</button>
+          <button onclick="addInput('アシスト', true)">アシスト</button>
+        </div>
+        <div class="button-grid grid-3x3">
+          <button onclick="addInput(' SA1 ')">SA1</button>
+          <button onclick="addInput(' SA2 ')">SA2</button>
+          <button onclick="addInput(' SA3 ')">SA3</button>
+        </div>
       </div>
+
       <div class="section-title">特殊入力</div>
       <div class="button-grid grid-3x3-special">
         <button onclick="addInput('+')">＋</button>
@@ -104,6 +133,7 @@
         <button onclick="addInput('(微歩き)')">微歩き</button>
       </div>
     </div>
+
     <div class="right">
       <div class="section-title">出力</div>
       <div class="display-box" id="output"></div>
@@ -116,6 +146,7 @@
       </div>
     </div>
   </div>
+
   <script>
     let output = '';
     let history = [];
@@ -198,6 +229,14 @@
 
     document.querySelectorAll('input[name="mode"]').forEach(radio => {
       radio.addEventListener('change', convertOutputMode);
+    });
+
+    document.querySelectorAll('input[name="style"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const style = document.querySelector('input[name="style"]:checked').value;
+        document.getElementById('classic-buttons').style.display = (style === 'classic') ? 'block' : 'none';
+        document.getElementById('modern-buttons').style.display = (style === 'modern') ? 'block' : 'none';
+      });
     });
   </script>
 </body>
