@@ -28,14 +28,14 @@
     label { margin-right: 10px; }
     @media (max-width: 768px) { .row { flex-direction: column; } }
     .divider { border: none; border-top: 1px solid #888; margin: 10px 0; }
+    /* GitHub アイコン用 */
+    .github-icon { position: fixed; top: 10px; right: 10px; z-index: 1000; }
   </style>
 </head>
 <body>
-  <!-- GitHubアイコンの追加 -->
-  <a href="https://github.com/HatoAttack/sf6-command-input" target="_blank" style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
-    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="32" height="32">大まかな使い方はリポジトリを見てください。
-  </a>
-
+  <!-- GitHubアイコン（右上固定） -->
+  <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="32" height="32"></a>大まかな使い方はリポジトリを見てください。
+  
   <h1>スト6 コンボ入力ツール</h1>
   <div class="container">
     <div class="left">
@@ -52,17 +52,17 @@
       <div class="row">
         <div class="column" id="direction-area">
           <div class="section-title">方向キー</div>
-          <!-- 3×3 グリッド -->
+          <!-- 3×3 グリッド（方向キーはdata-value属性を付与） -->
           <div class="button-grid grid-3x3">
-            <button onclick="addInput('7')">↖</button>
-            <button onclick="addInput('8')">↑</button>
-            <button onclick="addInput('9')">↗</button>
-            <button onclick="addInput('4')">←</button>
-            <button onclick="addInput('5')">N</button>
-            <button onclick="addInput('6')">→</button>
-            <button onclick="addInput('1')">↙</button>
-            <button onclick="addInput('2')">↓</button>
-            <button onclick="addInput('3')">↘</button>
+            <button class="direction-button" data-value="7" onclick="addInput('7')">↖</button>
+            <button class="direction-button" data-value="8" onclick="addInput('8')">↑</button>
+            <button class="direction-button" data-value="9" onclick="addInput('9')">↗</button>
+            <button class="direction-button" data-value="4" onclick="addInput('4')">←</button>
+            <button class="direction-button" data-value="5" onclick="addInput('5')">N</button>
+            <button class="direction-button" data-value="6" onclick="addInput('6')">→</button>
+            <button class="direction-button" data-value="1" onclick="addInput('1')">↙</button>
+            <button class="direction-button" data-value="2" onclick="addInput('2')">↓</button>
+            <button class="direction-button" data-value="3" onclick="addInput('3')">↘</button>
           </div>
           <!-- 仕切り線 -->
           <hr class="divider">
@@ -119,7 +119,7 @@
       <div class="section-title">特殊入力</div>
       <div class="button-grid grid-3x3-special">
         <button onclick="addInput('+')">＋</button>
-        <button onclick="addInput('(CDR)')">キャンセルラッシュ</button>
+        <button onclick="addInput('(CR)')">キャンセルラッシュ</button>
         <button onclick="addInput('(DR)')">ドライブラッシュ</button>
         <button onclick="addInput('J')">ジャンプ</button>
         <button onclick="addInput('前J')">前ジャンプ</button>
@@ -129,9 +129,9 @@
         <button onclick="addInput('(微歩き)')">微歩き</button>
       </div>
       <div class="button-grid grid-3x1">
-        <button onclick="addInput('(カウンター)')">カウンター</button>
-        <button onclick="addInput('(パニカン)')">パニカン</button>
-        <!-- 任意入力ボタン：idを追加 -->
+        <button onclick="addInput('(カウンター時)')">カウンター時</button>
+        <button onclick="addInput('(パニカン時)')">パニカン時</button>
+        <!-- 任意入力ボタン -->
         <button id="customInputButton" onclick="customInput()">任意入力</button>
       </div>
       <!-- 任意入力内容クリア用ボタン -->
@@ -145,31 +145,41 @@
       <div class="section-title">メモ</div>
       <textarea class="memo-box" id="memo" rows="4" placeholder="フレーム数や解説を入力"></textarea>
       <div class="control">
-        <button onclick="undoOutput()">戻る</button>
+        <button onclick="undoOutput()">戻る(Undo)</button>
         <button onclick="copyOutput()">コピー</button>
         <button onclick="clearOutput()">クリア</button>
+      </div>
+      <!-- 保存機能 -->
+      <div class="section-title">保存機能</div>
+      <div class="control">
+        <button onclick="saveCurrentCombo()">コンボ保存</button>
+        <button onclick="exportCombosToCSV(savedCombos)">CSVエクスポート</button>
+        <!-- CSV読み込み用: ファイル選択 -->
+        <input type="file" id="fileInput" onchange="handleFileSelect(event)" accept=".csv"/>
       </div>
     </div>
   </div>
   <script>
+    // 既存のコンボ入力処理
     let output = '';
     let history = [];
     let lastWasDirection = false;
     const outputBox = document.getElementById('output');
     const memoBox = document.getElementById('memo');
-    const arrowMap = {'1': '↙','2': '↓','3': '↘','4': '←','5': 'N','6': '→','7': '↖','8': '↑','9': '↗'};
+    const arrowMap = {
+      '1': '↙', '2': '↓', '3': '↘',
+      '4': '←', '5': 'N', '6': '→',
+      '7': '↖', '8': '↑', '9': '↗'
+    };
     
-    // 任意入力用グローバル変数
+    // 任意入力ボタン関連
     var customText = "";
-  
     function getMode() {
       return document.querySelector('input[name="mode"]:checked').value;
     }
-  
     function convertToArrow(seq) {
       return seq.split('').map(c => arrowMap[c] || c).join('');
     }
-  
     function addInput(value, isAttack = false) {
       history.push(output);
       let mode = getMode();
@@ -187,7 +197,6 @@
       outputBox.textContent = output;
       saveState();
     }
-  
     function undoOutput() {
       if (history.length > 0) {
         output = history.pop();
@@ -195,12 +204,10 @@
         saveState();
       }
     }
-  
     function copyOutput() {
       navigator.clipboard.writeText(output + '\n' + memoBox.value);
       alert('コピーしました');
     }
-  
     function clearOutput() {
       output = '';
       outputBox.textContent = '';
@@ -210,12 +217,10 @@
       localStorage.removeItem('sf6_output');
       localStorage.removeItem('sf6_memo');
     }
-  
     function saveState() {
       localStorage.setItem('sf6_output', output);
       localStorage.setItem('sf6_memo', memoBox.value);
     }
-  
     function convertOutputMode() {
       let mode = getMode();
       let newOutput = output;
@@ -231,11 +236,21 @@
       outputBox.textContent = output;
       saveState();
     }
-  
+    // 方向キーの表示をモードに合わせて更新
+    function updateDirectionButtons() {
+      const mode = getMode();
+      const buttons = document.querySelectorAll('.direction-button');
+      buttons.forEach(button => {
+        const value = button.getAttribute('data-value');
+        button.textContent = mode === 'arrow' ? (arrowMap[value] || value) : value;
+      });
+    }
     document.querySelectorAll('input[name="mode"]').forEach(radio => {
-      radio.addEventListener('change', convertOutputMode);
+      radio.addEventListener('change', () => {
+        convertOutputMode();
+        updateDirectionButtons();
+      });
     });
-  
     document.querySelectorAll('input[name="style"]').forEach(radio => {
       radio.addEventListener('change', () => {
         const style = document.querySelector('input[name="style"]:checked').value;
@@ -243,23 +258,18 @@
         document.getElementById('modern-buttons').style.display = (style === 'modern') ? 'block' : 'none';
       });
     });
-  
-    // Enter キーで「＞(次)」を入力する（メモ以外がフォーカスの場合）
+    updateDirectionButtons();
     document.addEventListener("keydown", function(event) {
       if (document.activeElement !== memoBox && event.key === "Enter") {
         event.preventDefault();
         addInput(' > ');
       }
     });
-  
-    // 任意入力ボタン用の関数
     function customInput() {
-      // 入力未設定の場合は prompt を表示
       if (customText === "") {
         let userInput = prompt("任意の入力をしてください");
         if (userInput !== null && userInput.trim() !== "") {
           customText = userInput.trim();
-          // ボタンのテキストを更新（赤色で表示）
           let btn = document.getElementById("customInputButton");
           btn.textContent = customText;
           btn.style.color = "red";
@@ -267,17 +277,119 @@
           return;
         }
       }
-      // 既に設定済みの場合はその内容を出力に追加
       addInput(customText);
     }
-  
-    // 任意入力内容をクリアする関数
     function clearCustomInput() {
       customText = "";
       let btn = document.getElementById("customInputButton");
       btn.textContent = "任意入力";
       btn.style.color = "";
     }
+    
+    // ----- 保存・読み込み機能用処理 -----
+    // グローバル変数
+    var savedCombos = [];
+    var untitledCounter = 1;
+    
+    // 作成日時を "YYYY-MM-DDThh:mm" 形式で返す関数
+    function formatDate() {
+      let now = new Date();
+      let year = now.getFullYear();
+      let month = ("0" + (now.getMonth() + 1)).slice(-2);
+      let day = ("0" + now.getDate()).slice(-2);
+      let hour = ("0" + now.getHours()).slice(-2);
+      let minute = ("0" + now.getMinutes()).slice(-2);
+      return `${year}-${month}-${day}T${hour}:${minute}`;
+    }
+    
+    // ID生成：作成日時（YYYYMMDDhhmm）を16進数に変換
+    function generateID() {
+      let now = new Date();
+      let year = now.getFullYear().toString();
+      let month = ("0" + (now.getMonth() + 1)).slice(-2);
+      let day = ("0" + now.getDate()).slice(-2);
+      let hour = ("0" + now.getHours()).slice(-2);
+      let minute = ("0" + now.getMinutes()).slice(-2);
+      let dateStr = year + month + day + hour + minute;
+      return parseInt(dateStr, 10).toString(16);
+    }
+    
+    // コンボ保存処理：ユーザー入力＋自動割当（タイトルが空の場合「無題X」）
+    function saveCurrentCombo() {
+      let combo = output;
+      let memoText = memoBox.value;
+      if(combo.trim() === ""){
+        alert("コンボが入力されていません。");
+        return;
+      }
+      let titleInput = prompt("コンボのタイトルを入力してください。（空欄の場合は自動で『無題』が割り当てられます）");
+      let title;
+      if(titleInput === null) return; // キャンセル
+      if(titleInput.trim() === ""){
+        title = "無題" + untitledCounter;
+        untitledCounter++;
+      } else {
+        title = titleInput.trim();
+      }
+      // 同じタイトルのエントリがあるかチェック（内部IDで管理するため、タイトルでの上書きを実現）
+      let existing = savedCombos.find(item => item.title === title);
+      let nowFormatted = formatDate();
+      if(existing) {
+        existing.combo = combo;
+        existing.memo = memoText;
+        existing.updatedAt = nowFormatted;
+        alert("既存のコンボを上書きしました。");
+      } else {
+        let id = generateID();
+        let newCombo = {
+          id: id,
+          title: title,
+          combo: combo,
+          memo: memoText,
+          createdAt: nowFormatted,
+          updatedAt: nowFormatted
+        };
+        savedCombos.push(newCombo);
+        alert("新しいコンボが保存されました。");
+      }
+    }
+    
+    // CSVエクスポート処理
+    function exportCombosToCSV(comboArray) {
+      let csvContent = "ID,タイトル,コンボ,メモ,作成日時,更新日時\n";
+      comboArray.forEach(item => {
+        csvContent += `${item.id},${item.title},${item.combo},${item.memo},${item.createdAt},${item.updatedAt}\n`;
+      });
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "combos.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+    
+    // CSV読み込み処理（ファイル選択イベントで呼び出し）
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const text = e.target.result;
+        const lines = text.split("\n").filter(line => line.trim() !== "");
+        let newCombos = [];
+        for(let i=1; i<lines.length; i++){
+          const [id, title, combo, memo, createdAt, updatedAt] = lines[i].split(",");
+          if(id) {
+            newCombos.push({ id, title, combo, memo, createdAt, updatedAt });
+          }
+        }
+        savedCombos = newCombos;
+        alert("保存されたコンボが読み込まれました。");
+      };
+      reader.readAsText(file, "UTF-8");
+    }
+    
   </script>
 </body>
 </html>
