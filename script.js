@@ -426,14 +426,20 @@
     });
     
     
-    document.addEventListener("keydown", function(event) {
-      if (document.activeElement !== memoBox && 
-          document.activeElement !== customInputField && 
-          event.key === "Enter") {
-        event.preventDefault();
-        addInput(' > ');
-      }
-    });
+ document.addEventListener("keydown", function(event) {
+   // メモ欄や任意入力欄以外で Enter を押したとき
+   if (document.activeElement !== memoBox &&
+       document.activeElement !== customInputField &&
+       event.key === "Enter") {
+     event.preventDefault();
+     // Shift + Enter なら改行、それ以外の Enter なら次へ
+     if (event.shiftKey) {
+       addInput('\n');
+     } else {
+       addInput(' > ');
+     }
+   }
+ });
     
     
     function initCollapsibles() {

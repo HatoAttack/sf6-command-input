@@ -92,16 +92,16 @@
         <button onclick="copyOutput()">コピー</button>
         <button onclick="clearOutput()">クリア</button>
       </div>
-      
-      <div class="section-title">保存機能</div>
+	<div class="section-title">保存機能</div>
 		<div class="control">
-		  <input type="file" id="fileInput" onchange="handleFileSelect(event)" accept=".csv"/>
-		  <button onclick="saveCurrentCombo()">コンボ保存</button>
-		  <button onclick="exportCombosToCSV(savedCombos)">CSVエクスポート</button>
-</div>
-
+			<input type="file" id="fileInput" onchange="handleFileSelect(event)" accept=".csv"/>
+		</div>
+		<div class="control">
+			<button onclick="saveCurrentCombo()">コンボ保存</button>
+			<button onclick="exportCombosToCSV(savedCombos)">CSVエクスポート</button>
+		</div>
     </div>
-  </div>
+</div>
   
   <script src="script.js"></script>
 </body>
