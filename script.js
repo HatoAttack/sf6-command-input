@@ -114,13 +114,13 @@
       
       const classicAttacks = [
         { text: 'P', value: 'P', class: 'btn-pk-essential' },
-        { text: '小P', value: '小P', class: 'btn-small' },
+        { text: '弱P', value: '弱P', class: 'btn-small' },
         { text: '中P', value: '中P', class: 'btn-middle' },
-        { text: '大P', value: '大P', class: 'btn-large' },
+        { text: '強P', value: '強P', class: 'btn-large' },
         { text: 'K', value: 'K', class: 'btn-pk-essential' },
-        { text: '小K', value: '小K', class: 'btn-small' },
+        { text: '弱K', value: '弱K', class: 'btn-small' },
         { text: '中K', value: '中K', class: 'btn-middle' },
-        { text: '大K', value: '大K', class: 'btn-large' }
+        { text: '強K', value: '強K', class: 'btn-large' }
       ];
       
       classicAttacks.forEach(atk => {
