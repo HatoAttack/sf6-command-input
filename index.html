@@ -168,12 +168,13 @@
       box-sizing: border-box;
       resize: vertical;
     }
-    .control { 
-      display: flex; 
-      gap: 6px; 
-      flex-wrap: wrap; 
-      margin-bottom: 8px; 
-    }
+	.control { 
+	  display: flex; 
+	  gap: 6px; 
+	  flex-wrap: nowrap; 
+	  margin-bottom: 8px; 
+	  justify-content: space-between; 
+	}
     .divider { 
       border: none; 
       border-top: 1px solid #888; 
@@ -398,9 +399,6 @@
           <button id="customInputButton" onclick="addCustomInput()">任意入力追加</button>
           <input type="text" id="customInputField" class="custom-input-field" placeholder="任意の入力を入力">
         </div>
-        <div class="button-grid grid-1x1">
-          <button onclick="clearCustomInput()">任意入力クリア</button>
-        </div>
       </div>
     </div>
     
@@ -417,11 +415,12 @@
       </div>
       
       <div class="section-title">保存機能</div>
-      <div class="control">
-        <button onclick="saveCurrentCombo()">コンボ保存</button>
-        <button onclick="exportCombosToCSV(savedCombos)">CSVエクスポート</button>
-        <input type="file" id="fileInput" onchange="handleFileSelect(event)" accept=".csv"/>
-      </div>
+		<div class="control">
+		  <input type="file" id="fileInput" onchange="handleFileSelect(event)" accept=".csv"/>
+		  <button onclick="saveCurrentCombo()">コンボ保存</button>
+		  <button onclick="exportCombosToCSV(savedCombos)">CSVエクスポート</button>
+</div>
+
     </div>
   </div>
   
@@ -672,14 +671,6 @@
         }
       }
       addInput(customText);
-    }
-    
-    function clearCustomInput() {
-      customText = "";
-      customInputField.value = "";
-      let btn = document.getElementById("customInputButton");
-      btn.textContent = "任意入力追加";
-      btn.style.color = "";
     }
     
     function undoOutput() {
