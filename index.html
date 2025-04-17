@@ -7,8 +7,11 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>スト6 コンボ入力ツール</h1>
-	<button id="helpBtn" style="font-size: 0.8em; margin-left: 8px;">使い方</button>
+	<!-- ヘッダー -->
+	<div class="header">
+	  <h1>スト6 コンボ入力ツール</h1>
+	  <button id="helpBtn" class="tiny-button">使い方</button>
+	</div>
   <div class="container">
     <div class="panel">
       
@@ -105,7 +108,17 @@
     <div class="modal-content">
       <button id="closeModal">✕</button>
       <h2>使い方</h2>
-      <p>ツールの使い方を説明する文章</p>
+      <p>
+      表示モード：方向キーの表記を矢印か数字に切り替えます。
+      操作モード：ボタン入力をクラシックかモダンかに切り替えます。
+      ＋：「+」を入力します
+      ＞(次)：「>」を入力します。Enterキーに対応しています。
+      戻る：コンボレシピのUndoです。押すと入力1手前に戻ります。
+      改行：コンボレシピを改行できるので、複数のコンボレシピをまとめて出力できます。
+      任意入力：任意の単語を入力できます。
+      メモ：メモ欄です。コンボレシピと別行で、セットでコピーできます。
+      保存機能：出力したコンボとメモをセットでCSV形式に書き出します。また、過去に書き出したCSVを読み込めるので、追記できます。
+      </p>
     </div>
   </div>
 

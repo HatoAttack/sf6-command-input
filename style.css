@@ -319,7 +319,7 @@
         letter-spacing: -0.5px;
       }
     }
-  /* ----- オーバーレイ ----- */
+
 #overlay {
   display: none;               /* 最初は隠しておく */
   position: fixed;
@@ -328,7 +328,6 @@
   z-index: 1000;
 }
 
-/* ----- モーダル本体 ----- */
 #infoModal {
   display: none;
   position: fixed;
@@ -354,4 +353,27 @@
   border: none;
   font-size: 18px;
   cursor: pointer;
+}
+
+/* ヘッダーを中央寄せの横並びに */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+/* 見出しの余白リセット*/
+.header h1 {
+  margin: 0;
+}
+
+/* ボタンを必要なサイズだけに */
+.tiny-button {
+  width: auto;
+  min-width: initial;
+  padding: 4px 8px;
+  font-size: 0.8em;
+  margin-left: 8px;
+  white-space: nowrap;
 }
