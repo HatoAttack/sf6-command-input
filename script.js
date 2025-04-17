@@ -491,4 +491,32 @@
     
     
     init();
+
+// 1) 要素を取得
+const overlay = document.getElementById('overlay');
+const infoModal = document.getElementById('infoModal');
+const closeModalBtn = document.getElementById('closeModal');
+
+// 2) モーダルを開く関数
+function showInfoModal() {
+  overlay.style.display = 'block';
+  infoModal.style.display = 'block';
+}
+
+// 3) モーダルを閉じる関数
+function hideInfoModal() {
+  overlay.style.display = 'none';
+  infoModal.style.display = 'none';
+}
+
+// 4) 閉じるボタンとオーバーレイクリックで閉じる
+closeModalBtn.addEventListener('click', hideInfoModal);
+overlay.addEventListener('click', hideInfoModal);
+
+// 5) （任意）「説明」ボタンを押したら開く
+//    画面上に説明ボタンを追加しておくと親切です。
+//    例：<button id="helpBtn">説明</button> を HTML に追加。
+const helpBtn = document.getElementById('helpBtn');
+if (helpBtn) helpBtn.addEventListener('click', showInfoModal);
+
   
