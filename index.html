@@ -66,7 +66,19 @@
           </div>
         </div>
       </div>
-      
+      <div class="section-title collapsible" id="specialMovesHeader">必殺技</div>
+<div class="collapsible-content">
+  <div id="characterSelectArea">
+    <select id="characterSelect" onchange="selectCharacter(this.value)">
+      <option value="manon" selected>マノン</option>
+      <!-- 将来的に他のキャラクターを追加可能 -->
+    </select>
+  </div>
+  
+  <div id="specialMovesArea">
+    <!-- ここに技ボタンがJavaScriptで動的に追加される -->
+  </div>
+</div>
       <div class="section-title collapsible" id="specialInputsHeader">特殊入力</div>
       <div class="collapsible-content">
         <div class="button-grid grid-4x4-special" id="specialInputs"></div>
@@ -121,7 +133,7 @@
       </p>
     </div>
   </div>
-
+　<script src="characters-data.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
