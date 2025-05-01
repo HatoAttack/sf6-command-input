@@ -68,12 +68,11 @@
       </div>
       <div class="section-title collapsible" id="specialMovesHeader">必殺技</div>
 <div class="collapsible-content">
-  <div id="characterSelectArea">
-    <select id="characterSelect" onchange="selectCharacter(this.value)">
-      <option value="manon" selected>マノン</option>
-      <!-- 将来的に他のキャラクターを追加可能 -->
-    </select>
-  </div>
+<div id="characterSelectArea">
+  <select id="characterSelect">
+    <!-- キャラクター選択はJSで動的に生成されます -->
+  </select>
+</div>
   
   <div id="specialMovesArea">
     <!-- ここに技ボタンがJavaScriptで動的に追加される -->
@@ -118,21 +117,21 @@
   <div id="overlay"></div>
   <div id="infoModal">
     <div class="modal-content">
-      <button id="closeModal">✕</button>
-      <h2>ざっくりとした使い方</h2>
-      <p>
-      <b>表示モード</b>：方向キーの表記を矢印か数字に切り替えます。<br>
-      <b>操作モード</b>：ボタン入力をクラシックかモダンかに切り替えます。<br>
-      <b>＋</b>：「+」を入力します<br>
-      <b>＞(次)</b>：「>」を入力します。Enterキーに対応しています。<br>
-      <b>戻る</b>：コンボレシピのUndoです。押すと入力1手前に戻ります。<br>
-      <b>改行</b>：コンボレシピを改行できるので、複数のコンボレシピをまとめて出力できます。<br>
-      <b>任意入力</b>：任意の単語を入力できます。<br>
-      <b>メモ</b>：メモ欄です。コンボレシピと別行で、セットでコピーできます。<br>
-      <b>保存機能</b>：出力したコンボとメモをセットでCSV形式に書き出します。また、過去に書き出したCSVを読み込めるので、追記できます。<br>
-      </p>
-    </div>
-  </div>
+<div class="modal-content">
+  <button id="closeModal">✕</button>
+  <h2>ざっくりとした使い方</h2>
+  <p>
+  <b>表示モード</b>：方向キーの表記を矢印か数字に切り替えます。<br>
+  <b>操作モード</b>：ボタン入力をクラシックかモダンかに切り替えます。<br>
+  <b>＋</b>：「+」を入力します<br>
+  <b>＞(次)</b>：「>」を入力します。右矢印キーに対応しています。<br>
+  <b>戻る</b>：コンボレシピのUndoです。押すと入力1手前に戻ります。Backspaceキーも同じ機能です。<br>
+  <b>改行</b>：コンボレシピを改行できるので、複数のコンボレシピをまとめて出力できます。<br>
+  <b>任意入力</b>：任意の単語を入力できます。<br>
+  <b>メモ</b>：メモ欄です。コンボレシピと別行で、セットでコピーできます。<br>
+  <b>保存機能</b>：出力したコンボとメモをセットでCSV形式に書き出します。また、過去に書き出したCSVを読み込めるので、追記できます。<br>
+  </p>
+</div>
 　<script src="characters-data.js"></script>
   <script src="script.js"></script>
 </body>

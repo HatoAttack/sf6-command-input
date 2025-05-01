@@ -408,6 +408,50 @@ function handleFileSelect(event) {
   reader.readAsText(file, "UTF-8");
 }
 
+// 新規追加: キャラクター選択のドロップダウンにマリーザを追加する関数
+function populateCharacterSelect() {
+  const characterSelect = document.getElementById('characterSelect');
+  if (!characterSelect) return;
+  
+  // セレクトボックスをクリア
+  characterSelect.innerHTML = '';
+  
+  // CharactersDataから全キャラクターを取得
+  const characters = CharactersData.getAllCharacters();
+  
+  // 各キャラクターをオプションとして追加
+  characters.forEach(character => {
+    const option = document.createElement('option');
+    option.value = character.id;
+    option.textContent = character.name;
+    characterSelect.appendChild(option);
+  });
+}
+
+// 修正: キーボードイベント処理を修正（Enterキーを右矢印キーに変更、Backspaceキー対応追加）
+document.addEventListener("keydown", function(event) {
+  // メモ欄や任意入力欄以外での処理
+  if (document.activeElement !== memoBox &&
+      document.activeElement !== customInputField) {
+    
+    // 右矢印キーで「>」を入力（Enterキーの代わりに）
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      // Shift + 右矢印なら改行、それ以外の右矢印なら次へ
+      if (event.shiftKey) {
+        addInput('\n');
+      } else {
+        addInput(' > ');
+      }
+    }
+    
+    // Backspaceキーで「戻る」機能
+    if (event.key === "Backspace") {
+      event.preventDefault();
+      undoOutput();
+    }
+  }
+});
 
 document.querySelectorAll('input[name="mode"]').forEach(radio => {
   radio.addEventListener('change', () => {
@@ -424,7 +468,8 @@ document.querySelectorAll('input[name="style"]').forEach(radio => {
   });
 });
 
-
+// 既存のEnterキーのイベントリスナーをコメントアウト（削除）
+/*
 document.addEventListener("keydown", function(event) {
   // メモ欄や任意入力欄以外で Enter を押したとき
   if (document.activeElement !== memoBox &&
@@ -439,7 +484,7 @@ document.addEventListener("keydown", function(event) {
     }
   }
 });
-
+*/
 
 function initCollapsibles() {
   const collapsibles = document.querySelectorAll('.collapsible');
@@ -552,6 +597,7 @@ function displaySpecialMoves(character) {
   }
 }
 
+// 修正: init関数にキャラクターセレクトの初期化を追加
 function init() {
   initDirectionGrid();
   initSpecialDirections();
@@ -563,6 +609,9 @@ function init() {
   
   // 必殺技セクションの初期化
   initSpecialMoves();
+  
+  // ここに追加: キャラクター選択ドロップダウンを初期化
+  populateCharacterSelect();
   
   const savedOutput = localStorage.getItem('sf6_output');
   const savedMemo = localStorage.getItem('sf6_memo');
