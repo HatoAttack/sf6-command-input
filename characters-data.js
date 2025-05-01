@@ -35,9 +35,52 @@ const CharactersData = {
           value: 'グラン・フェッテ',
           variations: ['弱', '中', '強', 'OD']
         }
-      ],      
+      ]      
+    },  // ここにカンマを追加
+    {
+      id: 'marisa',
+      name: 'マリーザ',
+      // 必殺技リスト
+      specials: [
+        {
+          name: 'グラディウス',
+          value: 'グラディウス',
+          variations: ['弱', '中', '強', 'OD']
+        },
+        {
+          name: 'ディマカイルス',
+          value: 'ディマカイルス',
+          variations: ['弱', '中', '強', 'OD']
+        },
+        {
+          name: 'ファランクス',
+          value: 'ファランクス',
+          variations: ['弱', '中', '強', 'OD']
+        },
+        {
+          name: 'クアドリガ',
+          value: 'クアドリガ',
+          variations: ['弱', '中', '強', 'OD']
+        },
+        {
+          name: 'スクトゥム',
+          value: 'スクトゥム',
+          variations: ['スクトゥム', 'OD']
+        },
+        {
+          name: 'トニトルス',
+          value: 'トニトルス'
+        },
+        {
+          name: 'プロケッラ',
+          value: 'プロケッラ'
+        },
+        {
+          name: 'エンフォルド',
+          value: 'エンフォルド'
+        }
+      ]      
     }
-    // 将来的に他のキャラクターを追加可能
   ],
   
   // キャラクターIDからキャラクターデータを取得する関数

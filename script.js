@@ -489,7 +489,7 @@ function selectCharacter(characterId) {
   displaySpecialMoves(character);
 }
 
-// 必殺技ボタンを表示する関数（修正版）
+// 必殺技ボタンを表示する関数（バリエーションなしの技にも対応）
 function displaySpecialMoves(character) {
   const specialMovesArea = document.getElementById('specialMovesArea');
   if (!specialMovesArea) {
@@ -505,7 +505,7 @@ function displaySpecialMoves(character) {
     const specialsContainer = document.createElement('div');
     specialsContainer.className = 'specials-container';
     
-    // 各必殺技の行を作成（新しいレイアウト）
+    // 各必殺技の行を作成
     character.specials.forEach(special => {
       const moveRow = document.createElement('div');
       moveRow.className = 'move-row';
@@ -513,23 +513,38 @@ function displaySpecialMoves(character) {
       // 技名ラベル
       const moveLabel = document.createElement('span');
       moveLabel.className = 'move-label';
-      moveLabel.textContent = `${special.name}：`;
+      
+      // バリエーションがある場合は「技名：」、ない場合は「技名」だけ表示
+      moveLabel.textContent = special.variations && special.variations.length > 0 
+        ? `${special.name}：` 
+        : special.name;
+        
       moveRow.appendChild(moveLabel);
       
-// ボタングループ（インライン配置）
-const buttonGroup = document.createElement('span');  // divではなくspanを使用
-buttonGroup.className = 'button-group';
-
-// バリエーションボタンを作成
-special.variations.forEach(variation => {
-  const button = document.createElement('button');
-  button.className = 'special-move-button';
-  button.textContent = variation;
-  button.onclick = () => addInput(`${variation}${special.name}`);
-  buttonGroup.appendChild(button);
-});
-
-moveRow.appendChild(buttonGroup);
+      // バリエーションがある場合のみボタングループを作成
+      if (special.variations && special.variations.length > 0) {
+        const buttonGroup = document.createElement('span');
+        buttonGroup.className = 'button-group';
+        
+        // バリエーションボタンを作成
+        special.variations.forEach(variation => {
+          const button = document.createElement('button');
+          button.className = 'special-move-button';
+          button.textContent = variation;
+          button.onclick = () => addInput(`${variation}${special.name}`);
+          buttonGroup.appendChild(button);
+        });
+        
+        moveRow.appendChild(buttonGroup);
+      } else {
+        // バリエーションがない場合は技名だけのボタンを作成
+        const button = document.createElement('button');
+        button.className = 'special-move-button single-move';
+        button.textContent = special.name;
+        button.onclick = () => addInput(special.name);
+        moveRow.appendChild(button);
+      }
+      
       specialsContainer.appendChild(moveRow);
     });
     
